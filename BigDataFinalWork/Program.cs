@@ -203,7 +203,7 @@ namespace BigDataFinalWork
         }
 
         //static double perennialAverage(List<Precipitate> precipitates, double perennialAverage)
-        //{
+        ///{
         //    List<Tuple<int, double>> precipitateSums = new List<Tuple<int, double>>();
         //    List<Tuple<int, int, int>> yearsOfDroughtTuple = new List<Tuple<int, int, int>>();
         //    int counter = 0;
