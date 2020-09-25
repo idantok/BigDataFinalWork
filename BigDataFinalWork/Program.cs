@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Dynamic;
+using System.Diagnostics;
 
 namespace BigDataFinalWork
 {
@@ -12,6 +13,8 @@ namespace BigDataFinalWork
     {
         static void Main(string[] args)
         {
+            Process proc = Process.GetCurrentProcess();
+            DateTime dt = DateTime.Now;
             List<Precipitate> precipitates = new List<Precipitate>();
             List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
             List<Tuple<int, double>> minPrecipitateStates = new List<Tuple<int, double>>();
@@ -36,7 +39,9 @@ namespace BigDataFinalWork
             Console.WriteLine("The minimum amount of precipitation in summer is in {0} and the amount is: {1}", minPrecipitatPeriod[3].Item1, minPrecipitatPeriod[3].Item2);
             Console.WriteLine("############################################################################");
             //Console.WriteLine(perennialAverage(precipitates));
-
+            TimeSpan ts = DateTime.Now - dt;
+            Console.WriteLine("Time spend running program :{0} ms", ts.TotalMilliseconds.ToString());
+            Console.WriteLine("the memory used for the process is approximately : {0} KB", proc.PrivateMemorySize64/1000);
             Console.ReadLine();
         }
 
