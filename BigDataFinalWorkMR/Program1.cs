@@ -1,0 +1,248 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+
+namespace BigDataFinalWorkMR
+{
+    class Program1
+    {
+        static void Main(string[] args)
+        {
+            Thread computer1 = new Thread(method);
+            Thread computer2 = new Thread(method);
+            Thread computer3 = new Thread(method); 
+            computer1.Start();           
+            computer2.Start();
+            computer3.Start();
+            void method()
+            {
+
+
+                Process proc = Process.GetCurrentProcess();
+                DateTime dt = DateTime.Now;
+                List<Precipitate> precipitates = new List<Precipitate>();
+                List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
+                List<Tuple<int, double>> minPrecipitateStates = new List<Tuple<int, double>>();
+                List<Tuple<int, double>> maxPrecipitatPeriod = new List<Tuple<int, double>>();
+                List<Tuple<int, double>> minPrecipitatPeriod = new List<Tuple<int, double>>();
+                precipitates = WriteSafeReadAllLines("C:\\DataFile_FinalExercise.csv");
+                maxPrecipitateStates = maxPrecipitateYearStates(precipitates);
+                Console.WriteLine("The maximum amount of precipitation fell in {0} the amount is: {1}", maxPrecipitateStates[0].Item1, maxPrecipitateStates[0].Item2);
+                minPrecipitateStates = minPrecipitateYearStates(precipitates);
+                Console.WriteLine("The minimum amount of precipitation that fell in {0} the amount is: {1}", minPrecipitateStates[0].Item1, minPrecipitateStates[0].Item2);
+                Console.WriteLine("############################################################################");
+                maxPrecipitatPeriod = maxPrecipitatePeriodStates(precipitates);
+                Console.WriteLine("The maximum amount of precipitation in winter is in {0} and the amount is: {1}", maxPrecipitatPeriod[0].Item1, maxPrecipitatPeriod[0].Item2);
+                Console.WriteLine("The maximum amount of precipitation in autumn is in {0} and the amount is: {1}", maxPrecipitatPeriod[1].Item1, maxPrecipitatPeriod[1].Item2);
+                Console.WriteLine("The maximum amount of precipitation in spring is in {0} and the amount is: {1}", maxPrecipitatPeriod[2].Item1, maxPrecipitatPeriod[2].Item2);
+                Console.WriteLine("The maximum amount of precipitation in summer is in {0} and the amount is: {1}", maxPrecipitatPeriod[3].Item1, maxPrecipitatPeriod[3].Item2);
+                Console.WriteLine("############################################################################");
+                minPrecipitatPeriod = minPrecipitatePeriodStates(precipitates);
+                Console.WriteLine("The minimum amount of precipitation in winter is in {0} and the amount is: {1}", minPrecipitatPeriod[0].Item1, minPrecipitatPeriod[0].Item2);
+                Console.WriteLine("The minimum amount of precipitation in autumn is in {0} and the amount is: {1}", minPrecipitatPeriod[1].Item1, minPrecipitatPeriod[1].Item2);
+                Console.WriteLine("The minimum amount of precipitation in spring is in {0} and the amount is: {1}", minPrecipitatPeriod[2].Item1, minPrecipitatPeriod[2].Item2);
+                Console.WriteLine("The minimum amount of precipitation in summer is in {0} and the amount is: {1}", minPrecipitatPeriod[3].Item1, minPrecipitatPeriod[3].Item2);
+                Console.WriteLine("############################################################################");
+                Console.WriteLine("the perennial Average is :{0}", perennialAverage(precipitates));
+                TimeSpan ts = DateTime.Now - dt;
+                Console.WriteLine("Time spend running program :{0} ms", ts.TotalMilliseconds.ToString());
+                Console.WriteLine("the memory used for the process is approximately : {0} KB", proc.PrivateMemorySize64 / 1000);
+                Console.ReadLine();
+            }
+        }
+
+
+            static List<Tuple<int, double>> maxPrecipitatePeriodStates(List<Precipitate> precipitates)
+            {
+                //create tuple {year, sum of the month's Winter,sum of the month's springs,....}
+                List<Tuple<int, double, double, double, double>> periodPrecipitateSums = new List<Tuple<int, double, double, double, double>>();
+                List<Tuple<int, double>> maxPrecipitatePeriodStates = new List<Tuple<int, double>>();
+                double maxWinterPrecipitateAmount;
+                double maxSummerPrecipitateAmount;
+                double maxAutumnPrecipitateAmount;
+                double maxSpringPrecipitateAmount;
+                int maxWinterPrecipitateYear;
+                int maxSummerPrecipitateYear;
+                int maxAutumnPrecipitateYear;
+                int maxSpringPrecipitateYear;
+
+                //Going over the tuple and sum of the precipitate months period of each year
+                for (int i = 0; i < precipitates.Count; i++)
+                {
+                    periodPrecipitateSums.Add(new Tuple<int, double, double, double, double>(precipitates[i].year, precipitates[i].december + precipitates[i].january + precipitates[i].february, precipitates[i].march + precipitates[i].april + precipitates[i].may, precipitates[i].june + precipitates[i].july + precipitates[i].august, precipitates[i].september + precipitates[i].october + precipitates[i].november));
+                }
+
+                maxWinterPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item2).Max();
+                maxAutumnPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item3).Max();
+                maxSpringPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item4).Max();
+                maxSummerPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item5).Max();
+                int winterIndex = periodPrecipitateSums.FindIndex(t => t.Item2 == maxWinterPrecipitateAmount);
+                int autumnIndex = periodPrecipitateSums.FindIndex(t => t.Item3 == maxAutumnPrecipitateAmount);
+                int springIndex = periodPrecipitateSums.FindIndex(t => t.Item4 == maxSpringPrecipitateAmount);
+                int summerIndex = periodPrecipitateSums.FindIndex(t => t.Item5 == maxSummerPrecipitateAmount);
+                maxWinterPrecipitateYear = periodPrecipitateSums[winterIndex].Item1;
+                maxAutumnPrecipitateYear = periodPrecipitateSums[autumnIndex].Item1;
+                maxSpringPrecipitateYear = periodPrecipitateSums[springIndex].Item1;
+                maxSummerPrecipitateYear = periodPrecipitateSums[summerIndex].Item1;
+
+                //add the values of each period to tuple
+                maxPrecipitatePeriodStates.Add(new Tuple<int, double>(maxWinterPrecipitateYear, maxWinterPrecipitateAmount));
+                maxPrecipitatePeriodStates.Add(new Tuple<int, double>(maxAutumnPrecipitateYear, maxAutumnPrecipitateAmount));
+                maxPrecipitatePeriodStates.Add(new Tuple<int, double>(maxSpringPrecipitateYear, maxSpringPrecipitateAmount));
+                maxPrecipitatePeriodStates.Add(new Tuple<int, double>(maxSummerPrecipitateYear, maxSummerPrecipitateAmount));
+
+
+
+                return maxPrecipitatePeriodStates;
+            }
+
+            static List<Tuple<int, double>> minPrecipitatePeriodStates(List<Precipitate> precipitates)
+            {
+                //create tuple {year, sum of the month's Winter,sum of the month's springs,....}
+                List<Tuple<int, double, double, double, double>> periodPrecipitateSums = new List<Tuple<int, double, double, double, double>>();
+                List<Tuple<int, double>> minPrecipitatePeriodStates = new List<Tuple<int, double>>();
+                double minWinterPrecipitateAmount;
+                double minSummerPrecipitateAmount;
+                double minAutumnPrecipitateAmount;
+                double minSpringPrecipitateAmount;
+                int minWinterPrecipitateYear;
+                int minSummerPrecipitateYear;
+                int minAutumnPrecipitateYear;
+                int minSpringPrecipitateYear;
+
+                //Going over the tuple and sum of the precipitate months period of each year
+                for (int i = 0; i < precipitates.Count; i++)
+                {
+                    periodPrecipitateSums.Add(new Tuple<int, double, double, double, double>(precipitates[i].year, precipitates[i].december + precipitates[i].january + precipitates[i].february, precipitates[i].march + precipitates[i].april + precipitates[i].may, precipitates[i].june + precipitates[i].july + precipitates[i].august, precipitates[i].september + precipitates[i].october + precipitates[i].november));
+                }
+                minWinterPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item2).Min();
+                minAutumnPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item3).Min();
+                minSpringPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item4).Min();
+                minSummerPrecipitateAmount = periodPrecipitateSums.Select(p => p.Item5).Min();
+                int winterIndex = periodPrecipitateSums.FindIndex(t => t.Item2 == minWinterPrecipitateAmount);
+                int autumnIndex = periodPrecipitateSums.FindIndex(t => t.Item3 == minAutumnPrecipitateAmount);
+                int springIndex = periodPrecipitateSums.FindIndex(t => t.Item4 == minSpringPrecipitateAmount);
+                int summerIndex = periodPrecipitateSums.FindIndex(t => t.Item5 == minSummerPrecipitateAmount);
+                minWinterPrecipitateYear = periodPrecipitateSums[winterIndex].Item1;
+                minAutumnPrecipitateYear = periodPrecipitateSums[autumnIndex].Item1;
+                minSpringPrecipitateYear = periodPrecipitateSums[springIndex].Item1;
+                minSummerPrecipitateYear = periodPrecipitateSums[summerIndex].Item1;
+
+                //add the values of each period to tuple
+                minPrecipitatePeriodStates.Add(new Tuple<int, double>(minWinterPrecipitateYear, minWinterPrecipitateAmount));
+                minPrecipitatePeriodStates.Add(new Tuple<int, double>(minAutumnPrecipitateYear, minAutumnPrecipitateAmount));
+                minPrecipitatePeriodStates.Add(new Tuple<int, double>(minSpringPrecipitateYear, minSpringPrecipitateAmount));
+                minPrecipitatePeriodStates.Add(new Tuple<int, double>(minSummerPrecipitateYear, minSummerPrecipitateAmount));
+
+
+
+                return minPrecipitatePeriodStates;
+            }
+
+            static List<Tuple<int, double>> maxPrecipitateYearStates(List<Precipitate> precipitates)
+            {
+                //create tuple {year, sum of the precipitate months of each year}
+                List<Tuple<int, double>> precipitateSums = new List<Tuple<int, double>>();
+                List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
+                double maxPrecipitateAmount;
+                int maxPrecipitateYear;
+
+                //Going over the tuple and sum of the precipitate months of each year
+                for (int i = 0; i < precipitates.Count; i++)
+                {
+                    precipitateSums.Add(new Tuple<int, double>(precipitates[i].year, precipitates[i].january + precipitates[i].february + precipitates[i].march + precipitates[i].april + precipitates[i].may + precipitates[i].june + precipitates[i].july + precipitates[i].august + precipitates[i].september + precipitates[i].october + precipitates[i].november + precipitates[i].december));
+                }
+                //find the max amount from the tuple
+                maxPrecipitateAmount = precipitateSums.Select(p => p.Item2).Max();
+                //find the max year from the tuple by amount
+                int index = precipitateSums.FindIndex(t => t.Item2 == maxPrecipitateAmount);
+                maxPrecipitateYear = precipitateSums[index].Item1;
+
+                //Going over the tuple and find the max precipitate year and min precipitate year
+                maxPrecipitateStates.Add(new Tuple<int, double>(maxPrecipitateYear, maxPrecipitateAmount));
+                return maxPrecipitateStates;
+            }
+
+            static List<Tuple<int, double>> minPrecipitateYearStates(List<Precipitate> precipitates)
+            {
+                //create tuple {year, sum of the precipitate months of each year}
+                List<Tuple<int, double>> precipitateSums = new List<Tuple<int, double>>();
+                List<Tuple<int, double>> minPrecipitateStates = new List<Tuple<int, double>>();
+                double minPrecipitateAmount;
+                int minPrecipitateYear;
+
+
+                //Going over the tuple and sum of the precipitate months of each year
+                for (int i = 0; i < precipitates.Count; i++)
+                {
+                    precipitateSums.Add(new Tuple<int, double>(precipitates[i].year, precipitates[i].january + precipitates[i].february + precipitates[i].march + precipitates[i].april + precipitates[i].may + precipitates[i].june + precipitates[i].july + precipitates[i].august + precipitates[i].september + precipitates[i].october + precipitates[i].november + precipitates[i].december));
+                }
+                //find the min amount from the tuple
+                minPrecipitateAmount = precipitateSums.Select(p => p.Item2).Min();
+                //find the min year from the tuple by amount
+                int index = precipitateSums.FindIndex(t => t.Item2 == minPrecipitateAmount);
+                minPrecipitateYear = precipitateSums[index].Item1;
+
+                //Going over the tuple and find the min precipitate year and min precipitate year
+                minPrecipitateStates.Add(new Tuple<int, double>(minPrecipitateYear, minPrecipitateAmount));
+
+                return minPrecipitateStates;
+            }
+           public string[] WriteSafeReadAllLines(String path)
+{
+          
+    using (var csv = new FileStream("C:\\DataFile_FinalExercise.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+    using (var sr = new StreamReader(csv))
+    {
+        List<string> file = new List<string>();
+        while (!sr.EndOfStream)
+        {
+            file.Add(sr.ReadLine());
+        }
+        reader.close();
+        return file.ToArray();
+    }
+}
+
+            static double perennialAverage(List<Precipitate> precipitates)
+            {
+                List<double> precipitateSums = new List<double>();
+                //List<Tuple<int, int, int>> yearsOfDroughtTuple = new List<Tuple<int, int, int>>();
+                //int counter = 0;
+                //List<int> yearsOfDrought = new List<int>();
+                for (int i = 0; i < precipitates.Count; i++)
+                {
+                    precipitateSums.Add(precipitates[i].january + precipitates[i].february + precipitates[i].march + precipitates[i].april + precipitates[i].may + precipitates[i].june + precipitates[i].july + precipitates[i].august + precipitates[i].september + precipitates[i].october + precipitates[i].november + precipitates[i].december);
+                }
+
+                //for (int i = 0; i<precipitateSums.Count(); i++)
+                //{
+                //while (counter< 3)
+                //{
+                //    if (precipitateSums[i].Item2<perennialAverage)
+                //    {
+                //        counter++;
+                //        yearsOfDrought.Add(precipitateSums[i].Item1);
+                //    }
+                //    else
+                //    {
+                //        counter = 0;
+                //        continue;
+                //    }
+                //}
+
+
+                //counter = 0;
+
+
+
+
+                return precipitateSums.Sum() / precipitateSums.Count();
+            }
+        }
+    } 

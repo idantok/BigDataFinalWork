@@ -187,22 +187,23 @@ namespace BigDataFinalWork
 
             List<Precipitate> result = File.ReadAllLines("C:\\DataFile_FinalExercise.csv")
              .Select(y => y.Split(','))
-                    .Select(x => new {
-                        year = int.Parse(x[0]),
-                        januare = double.Parse(x[1]),
-                        february = double.Parse(x[2]),
-                        march = double.Parse(x[3]),
-                        april = double.Parse(x[4]),
-                        may = double.Parse(x[5]),
-                        june = double.Parse(x[6]),
-                        july = double.Parse(x[7]),
-                        august = double.Parse(x[8]),
-                        september = double.Parse(x[9]),
-                        october = double.Parse(x[10]),
-                        november = double.Parse(x[11]),
-                        december = double.Parse(x[12])
-                    }).Select(x => new Precipitate(x.year, x.januare, x.february, x.march, x.april, x.may, x.june, x.july, x.august, x.september, x.october, x.november, x.december))
+                    .Select(x => (
+                        year: int.Parse(x[0]),
+                        januare: double.Parse(x[1]),
+                        february: double.Parse(x[2]),
+                        march: double.Parse(x[3]),
+                        april: double.Parse(x[4]),
+                        may: double.Parse(x[5]),
+                        june: double.Parse(x[6]),
+                        july: double.Parse(x[7]),
+                        august: double.Parse(x[8]),
+                        september: double.Parse(x[9]),
+                        october: double.Parse(x[10]),
+                        november: double.Parse(x[11]),
+                        december: double.Parse(x[12])
+                    )).Select(x => new Precipitate(x.year, x.januare, x.february, x.march, x.april, x.may, x.june, x.july, x.august, x.september, x.october, x.november, x.december))
                .ToList();
+           
             return result;
 
         }
