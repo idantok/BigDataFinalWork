@@ -11,53 +11,97 @@ namespace BigDataFinalWorkMR
 {
     class Program1
     {
+        static Thread computer1 = new Thread(Method1);
+        static Thread computer2 = new Thread(Method2);
+        static Thread computer3 = new Thread(Method3);
         static void Main(string[] args)
         {
-            Thread computer1 = new Thread(method);
-            Thread computer2 = new Thread(method);
-            Thread computer3 = new Thread(method); 
-            computer1.Start();           
+      
+
+            computer1.Name = "computer1";
+            computer2.Name = "computer2";
+            computer3.Name = "computer3";
+            computer1.Start();
             computer2.Start();
             computer3.Start();
-            void method()
-            {
+
+        }
+        static void Method1()
+        {
+            int x = 80;
+            List<Precipitate> precipitates = new List<Precipitate>();
+            precipitates = precipitateCsvToList(x);
+            List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
+            maxPrecipitateStates = maxPrecipitateYearStates(precipitates);
+            Method(precipitates, maxPrecipitateStates);
+        }
+        static void Method2()
+        {
+            int x = 40;
+            List<Precipitate> precipitates = new List<Precipitate>();
+            precipitates = precipitateCsvToList(x);
+            List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
+            maxPrecipitateStates = maxPrecipitateYearStates(precipitates);
+            Method(precipitates, maxPrecipitateStates);
+        }
+        static void Method3()
+        {
+            int x = 0;
+            List<Precipitate> precipitates = new List<Precipitate>();
+            precipitates = precipitateCsvToList(x);
+            List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
+            maxPrecipitateStates = maxPrecipitateYearStates(precipitates);
+            Method(precipitates,maxPrecipitateStates);
+        }
+        static void Method(List<Precipitate> precipitates,List<Tuple<int,double>> maxPrecipitateStates)
+        {
+            double x;
+            Process proc = Process.GetCurrentProcess();
+            DateTime dt = DateTime.Now; 
+            List<Tuple<int, double>> minPrecipitateStates = new List<Tuple<int, double>>();
+            List<Tuple<int, double>> maxPrecipitatPeriod = new List<Tuple<int, double>>();
+            List<Tuple<int, double>> minPrecipitatPeriod = new List<Tuple<int, double>>();
+            Thread thr = Thread.CurrentThread;
+            thr.Suspend();
+            ///////*****************************************
+            //x = maxPrecipitateStates[0].Item2;
+            //need to do comparison between the threads and then
+            //put them into variable print the resoult and abort thr threds
+            /**/
 
 
-                Process proc = Process.GetCurrentProcess();
-                DateTime dt = DateTime.Now;
-                List<Precipitate> precipitates = new List<Precipitate>();
-                List<Tuple<int, double>> maxPrecipitateStates = new List<Tuple<int, double>>();
-                List<Tuple<int, double>> minPrecipitateStates = new List<Tuple<int, double>>();
-                List<Tuple<int, double>> maxPrecipitatPeriod = new List<Tuple<int, double>>();
-                List<Tuple<int, double>> minPrecipitatPeriod = new List<Tuple<int, double>>();
-                precipitates = WriteSafeReadAllLines("C:\\DataFile_FinalExercise.csv");
-                maxPrecipitateStates = maxPrecipitateYearStates(precipitates);
-                Console.WriteLine("The maximum amount of precipitation fell in {0} the amount is: {1}", maxPrecipitateStates[0].Item1, maxPrecipitateStates[0].Item2);
-                minPrecipitateStates = minPrecipitateYearStates(precipitates);
-                Console.WriteLine("The minimum amount of precipitation that fell in {0} the amount is: {1}", minPrecipitateStates[0].Item1, minPrecipitateStates[0].Item2);
-                Console.WriteLine("############################################################################");
-                maxPrecipitatPeriod = maxPrecipitatePeriodStates(precipitates);
-                Console.WriteLine("The maximum amount of precipitation in winter is in {0} and the amount is: {1}", maxPrecipitatPeriod[0].Item1, maxPrecipitatPeriod[0].Item2);
-                Console.WriteLine("The maximum amount of precipitation in autumn is in {0} and the amount is: {1}", maxPrecipitatPeriod[1].Item1, maxPrecipitatPeriod[1].Item2);
-                Console.WriteLine("The maximum amount of precipitation in spring is in {0} and the amount is: {1}", maxPrecipitatPeriod[2].Item1, maxPrecipitatPeriod[2].Item2);
-                Console.WriteLine("The maximum amount of precipitation in summer is in {0} and the amount is: {1}", maxPrecipitatPeriod[3].Item1, maxPrecipitatPeriod[3].Item2);
-                Console.WriteLine("############################################################################");
-                minPrecipitatPeriod = minPrecipitatePeriodStates(precipitates);
-                Console.WriteLine("The minimum amount of precipitation in winter is in {0} and the amount is: {1}", minPrecipitatPeriod[0].Item1, minPrecipitatPeriod[0].Item2);
-                Console.WriteLine("The minimum amount of precipitation in autumn is in {0} and the amount is: {1}", minPrecipitatPeriod[1].Item1, minPrecipitatPeriod[1].Item2);
-                Console.WriteLine("The minimum amount of precipitation in spring is in {0} and the amount is: {1}", minPrecipitatPeriod[2].Item1, minPrecipitatPeriod[2].Item2);
-                Console.WriteLine("The minimum amount of precipitation in summer is in {0} and the amount is: {1}", minPrecipitatPeriod[3].Item1, minPrecipitatPeriod[3].Item2);
-                Console.WriteLine("############################################################################");
-                Console.WriteLine("the perennial Average is :{0}", perennialAverage(precipitates));
-                TimeSpan ts = DateTime.Now - dt;
-                Console.WriteLine("Time spend running program :{0} ms", ts.TotalMilliseconds.ToString());
-                Console.WriteLine("the memory used for the process is approximately : {0} KB", proc.PrivateMemorySize64 / 1000);
-                Console.ReadLine();
-            }
+
+            /**/
+            /************************************/
+            Console.WriteLine("{0}: The maximum amount of precipitation fell in {1} the amount is: {2}",thr.Name ,maxPrecipitateStates[0].Item1, maxPrecipitateStates[0].Item2);
+            minPrecipitateStates = minPrecipitateYearStates(precipitates);
+            Console.WriteLine("The minimum amount of precipitation that fell in {0} the amount is: {1}", minPrecipitateStates[0].Item1, minPrecipitateStates[0].Item2);
+            Console.WriteLine("############################################################################");
+            maxPrecipitatPeriod = maxPrecipitatePeriodStates(precipitates);
+            Console.WriteLine("The maximum amount of precipitation in winter is in {0} and the amount is: {1}", maxPrecipitatPeriod[0].Item1, maxPrecipitatPeriod[0].Item2);
+            Console.WriteLine("The maximum amount of precipitation in autumn is in {0} and the amount is: {1}", maxPrecipitatPeriod[1].Item1, maxPrecipitatPeriod[1].Item2);
+            Console.WriteLine("The maximum amount of precipitation in spring is in {0} and the amount is: {1}", maxPrecipitatPeriod[2].Item1, maxPrecipitatPeriod[2].Item2);
+            Console.WriteLine("The maximum amount of precipitation in summer is in {0} and the amount is: {1}", maxPrecipitatPeriod[3].Item1, maxPrecipitatPeriod[3].Item2);
+            Console.WriteLine("############################################################################");
+            minPrecipitatPeriod = minPrecipitatePeriodStates(precipitates);
+            Console.WriteLine("The minimum amount of precipitation in winter is in {0} and the amount is: {1}", minPrecipitatPeriod[0].Item1, minPrecipitatPeriod[0].Item2);
+            Console.WriteLine("The minimum amount of precipitation in autumn is in {0} and the amount is: {1}", minPrecipitatPeriod[1].Item1, minPrecipitatPeriod[1].Item2);
+            Console.WriteLine("The minimum amount of precipitation in spring is in {0} and the amount is: {1}", minPrecipitatPeriod[2].Item1, minPrecipitatPeriod[2].Item2);
+            Console.WriteLine("The minimum amount of precipitation in summer is in {0} and the amount is: {1}", minPrecipitatPeriod[3].Item1, minPrecipitatPeriod[3].Item2);
+            Console.WriteLine("############################################################################");
+            Console.WriteLine("the perennial Average is :{0}", perennialAverage(precipitates));
+            TimeSpan ts = DateTime.Now - dt;
+            Console.WriteLine("Time spend running program :{0} ms", ts.TotalMilliseconds.ToString());
+            Console.WriteLine("the memory used for the process is approximately : {0} KB", proc.PrivateMemorySize64 / 1000);
+            Console.ReadLine();
         }
 
+        private static List<Precipitate> precipitateCsvToList()
+        {
+            throw new NotImplementedException();
+        }
 
-            static List<Tuple<int, double>> maxPrecipitatePeriodStates(List<Precipitate> precipitates)
+        static List<Tuple<int, double>> maxPrecipitatePeriodStates(List<Precipitate> precipitates)
             {
                 //create tuple {year, sum of the month's Winter,sum of the month's springs,....}
                 List<Tuple<int, double, double, double, double>> periodPrecipitateSums = new List<Tuple<int, double, double, double, double>>();
@@ -193,23 +237,33 @@ namespace BigDataFinalWorkMR
 
                 return minPrecipitateStates;
             }
-           public string[] WriteSafeReadAllLines(String path)
-{
-          
-    using (var csv = new FileStream("C:\\DataFile_FinalExercise.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-    using (var sr = new StreamReader(csv))
-    {
-        List<string> file = new List<string>();
-        while (!sr.EndOfStream)
+        static List<Precipitate> precipitateCsvToList(int f)
         {
-            file.Add(sr.ReadLine());
-        }
-        reader.close();
-        return file.ToArray();
-    }
-}
+            List<Precipitate> result = File.ReadAllLines("C:\\DataFile_FinalExercise.csv")
+             .Skip(f)
+             .Select(y => y.Split(','))
+                    .Select(x => (
+                        year: int.Parse(x[0]),
+                        januare: double.Parse(x[1]),
+                        february: double.Parse(x[2]),
+                        march: double.Parse(x[3]),
+                        april: double.Parse(x[4]),
+                        may: double.Parse(x[5]),
+                        june: double.Parse(x[6]),
+                        july: double.Parse(x[7]),
+                        august: double.Parse(x[8]),
+                        september: double.Parse(x[9]),
+                        october: double.Parse(x[10]),
+                        november: double.Parse(x[11]),
+                        december: double.Parse(x[12])
+                    )).Select(x => new Precipitate(x.year, x.januare, x.february, x.march, x.april, x.may, x.june, x.july, x.august, x.september, x.october, x.november, x.december))
+               .ToList();
 
-            static double perennialAverage(List<Precipitate> precipitates)
+            return result;
+
+        }
+
+        static double perennialAverage(List<Precipitate> precipitates)
             {
                 List<double> precipitateSums = new List<double>();
                 //List<Tuple<int, int, int>> yearsOfDroughtTuple = new List<Tuple<int, int, int>>();
