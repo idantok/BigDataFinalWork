@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace BigDataFinalWork
 {
-    class Program
+   public class Program
     {
         static void Main(string[] args)
         {
@@ -46,7 +46,7 @@ namespace BigDataFinalWork
         }
 
 
-        static List<Tuple<int, double>> maxPrecipitatePeriodStates(List<Precipitate> precipitates)
+        public static List<Tuple<int, double>> maxPrecipitatePeriodStates(List<Precipitate> precipitates)
         {
             //create tuple {year, sum of the month's Winter,sum of the month's springs,....}
             List<Tuple<int, double, double, double, double>> periodPrecipitateSums = new List<Tuple<int, double, double, double, double>>();
@@ -90,7 +90,7 @@ namespace BigDataFinalWork
             return maxPrecipitatePeriodStates;
         }
 
-        static List<Tuple<int, double>> minPrecipitatePeriodStates(List<Precipitate> precipitates)
+        public static List<Tuple<int, double>> minPrecipitatePeriodStates(List<Precipitate> precipitates)
         {
             //create tuple {year, sum of the month's Winter,sum of the month's springs,....}
             List<Tuple<int, double, double, double, double>> periodPrecipitateSums = new List<Tuple<int, double, double, double, double>>();
@@ -133,7 +133,7 @@ namespace BigDataFinalWork
             return minPrecipitatePeriodStates;
         }
 
-        static List<Tuple<int, double>> maxPrecipitateYearStates(List<Precipitate> precipitates)
+        public static List<Tuple<int, double>> maxPrecipitateYearStates(List<Precipitate> precipitates)
         {
             //create tuple {year, sum of the precipitate months of each year}
             List<Tuple<int, double>> precipitateSums = new List<Tuple<int, double>>();
@@ -157,7 +157,7 @@ namespace BigDataFinalWork
             return maxPrecipitateStates;
         }
 
-        static List<Tuple<int, double>> minPrecipitateYearStates(List<Precipitate> precipitates)
+        public static List<Tuple<int, double>> minPrecipitateYearStates(List<Precipitate> precipitates)
         {
             //create tuple {year, sum of the precipitate months of each year}
             List<Tuple<int, double>> precipitateSums = new List<Tuple<int, double>>();
@@ -183,9 +183,9 @@ namespace BigDataFinalWork
             return minPrecipitateStates;
         }
 
-        static List<Precipitate> precipitateCsvToList() {
+       public static List<Precipitate> precipitateCsvToList() {
 
-            List<Precipitate> result = File.ReadAllLines("C:\\DataFile_FinalExercise.csv")
+            List<Precipitate> result = File.ReadAllLines(@"DataFile_FinalExercise.csv")
              .Select(y => y.Split(','))
                     .Select(x => (
                         year: int.Parse(x[0]),
@@ -208,7 +208,7 @@ namespace BigDataFinalWork
 
         }
 
-        static double perennialAverage(List<Precipitate> precipitates)
+        public static double perennialAverage(List<Precipitate> precipitates)
         {
             List<double> precipitateSums = new List<double>();
             //List<Tuple<int, int, int>> yearsOfDroughtTuple = new List<Tuple<int, int, int>>();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BigDataFinalWork
 {
-    class Precipitate
+    public class Precipitate
     {
         public Precipitate(int year, double january, double february, double march, double april, double may, double june,double july, double august, double september, double october, double november,double december)
         {

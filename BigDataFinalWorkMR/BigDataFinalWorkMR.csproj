@@ -58,8 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Precipitate1.cs" />
-    <Compile Include="Program1.cs" />
+    <Compile Include="MapeReduce.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +87,15 @@
     <Content Include="MRLib\MRRunner.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BigDataFinalWork\BigDataFinalWork.csproj">
+      <Project>{7e6ef39a-77f2-40e1-bfed-e1450341d3a7}</Project>
+      <Name>BigDataFinalWork</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
