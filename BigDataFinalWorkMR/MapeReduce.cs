@@ -23,6 +23,7 @@ namespace BigDataFinalWorkNMR
             List<List<Tuple<int, double>>> threadOneStatesList = new List<List<Tuple<int, double>>>();
             List<List<Tuple<int, double>>> threadTwoStatesList = new List<List<Tuple<int, double>>>();
             List<List<Tuple<int, double>>> threadThreeStatesList = new List<List<Tuple<int, double>>>();
+            List<List<Tuple<int, double>>> results = new List<List<Tuple<int, double>>>();
             double plAverage;
             divPrecipitateToLists();
             Task t1 = threadOne();
@@ -38,7 +39,8 @@ namespace BigDataFinalWorkNMR
 
             //wait until all the threads finish and then take care in them
             Task.WhenAll(t1,t2,t3).ContinueWith(t => {
-                    double maxPrecipitateStatesNumber = Math.Max(threadOneStatesList[0][0].Item2, Math.Max(threadTwoStatesList[0][0].Item2, threadThreeStatesList[0][0].Item2));
+
+                double maxPrecipitateStatesNumber = Math.Max(threadOneStatesList[0][0].Item2, Math.Max(threadTwoStatesList[0][0].Item2, threadThreeStatesList[0][0].Item2));
                     double minPrecipitateStatesNumber = Math.Min(threadOneStatesList[1][0].Item2, Math.Min(threadTwoStatesList[1][0].Item2, threadThreeStatesList[1][0].Item2));
                     double maxWinterPrecipitatNumber = Math.Max(threadOneStatesList[2][0].Item2, Math.Max(threadTwoStatesList[2][0].Item2, threadThreeStatesList[2][0].Item2));
                     double maxAutumnPrecipitatNumber = Math.Max(threadOneStatesList[2][1].Item2, Math.Max(threadTwoStatesList[2][1].Item2, threadThreeStatesList[2][1].Item2));
@@ -48,19 +50,18 @@ namespace BigDataFinalWorkNMR
                     double minAutumnPrecipitatNumber = Math.Min(threadOneStatesList[3][1].Item2, Math.Min(threadTwoStatesList[3][1].Item2, threadThreeStatesList[3][1].Item2));
                     double minSpringPrecipitatNumber = Math.Min(threadOneStatesList[3][2].Item2, Math.Min(threadTwoStatesList[3][2].Item2, threadThreeStatesList[3][2].Item2));
                     double minSummerPrecipitatNumber = Math.Min(threadOneStatesList[3][3].Item2, Math.Min(threadTwoStatesList[3][3].Item2, threadThreeStatesList[3][3].Item2));
-                    Console.WriteLine("{0} , {1},", maxPrecipitateStatesNumber, minPrecipitateStatesNumber);
                     Console.WriteLine("The maximum amount of precipitation fell in  the amount is: {0}", maxPrecipitateStatesNumber);
                     Console.WriteLine("The minimum amount of precipitation that fell in the amount is: {0}", minPrecipitateStatesNumber);
                     Console.WriteLine("############################################################################");
                     Console.WriteLine("The maximum amount of precipitation in winter is: {0}", maxWinterPrecipitatNumber);
-                    Console.WriteLine("The maximum amount of precipitation in is: {0}", maxAutumnPrecipitatNumber);
-                    Console.WriteLine("The maximum amount of precipitation in is: {0}", maxSpringPrecipitatNumber);
-                    Console.WriteLine("The maximum amount of precipitation in is: {0}", maxSummerPrecipitatNumber);
+                    Console.WriteLine("The maximum amount of precipitation in autumn  is: {0}", maxAutumnPrecipitatNumber);
+                    Console.WriteLine("The maximum amount of precipitation in spring is: {0}", maxSpringPrecipitatNumber);
+                    Console.WriteLine("The maximum amount of precipitation in summer is: {0}", maxSummerPrecipitatNumber);
                     Console.WriteLine("############################################################################");
-                    Console.WriteLine("The minimum amount of precipitation in is: {0}", minWinterPrecipitatNumber);
-                    Console.WriteLine("The minimum amount of precipitation in is: {0}", minAutumnPrecipitatNumber);
-                    Console.WriteLine("The minimum amount of precipitation in is: {0}", minSpringPrecipitatNumber);
-                    Console.WriteLine("The minimum amount of precipitation in is: {0}", minSummerPrecipitatNumber);
+                    Console.WriteLine("The minimum amount of precipitation in winter is: {0}", minWinterPrecipitatNumber);
+                    Console.WriteLine("The minimum amount of precipitation in autumn is: {0}", minAutumnPrecipitatNumber);
+                    Console.WriteLine("The minimum amount of precipitation in spring is: {0}", minSpringPrecipitatNumber);
+                    Console.WriteLine("The minimum amount of precipitation in  summer is: {0}", minSummerPrecipitatNumber);
                     Console.WriteLine("############################################################################");
                     Console.WriteLine("the perennial Average is :{0}", plAverage);
                     TimeSpan ts = DateTime.Now - dt;
